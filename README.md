@@ -7,7 +7,7 @@
   </div>
   
 <!--![Joonbeom's GitHub stats](https://github-readme-stats.vercel.app/api?username=joonbeom02&show_icons=true&theme=blueberry)-->
-![](./profile-3d-contrib/profile-gitblock.svg)
+![](./profile-3d-contrib/profile-green-animate.svg)
 
 ## History
 
