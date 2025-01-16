@@ -23,11 +23,13 @@ jobs:
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
 
-          # Unstaged changes 처리
+          # 변경 사항 커밋 또는 스태시
           git add -A .
           git commit -m "temp commit for rebase" || echo "No changes to commit"
 
-          # Rebase와 강제 푸시
+          # Rebase 및 충돌 처리
           git fetch origin main
           git rebase origin/main || (git rebase --abort && echo "Rebase failed. Proceeding without rebase.")
+          
+          # 강제 푸시
           git push origin main --force-with-lease
