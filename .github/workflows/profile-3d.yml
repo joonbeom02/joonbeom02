@@ -23,8 +23,6 @@ jobs:
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
           git add -A .
-          if git commit -m "generated"; then
-            git push origin main
-          fi
-
+          git commit -m "generated" || echo "No changes to commit"
+          git push origin main
 
