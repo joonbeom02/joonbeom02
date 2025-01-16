@@ -6,7 +6,7 @@
 	
   </div>
   
-<!--![Hyounjun's GitHub stats](https://github-readme-stats.vercel.app/api?username=hyounjun-oh&show_icons=true&theme=blueberry)-->
+<!--![Joonbeom's GitHub stats](https://github-readme-stats.vercel.app/api?username=joonbeom02&show_icons=true&theme=blueberry)-->
 ![](./profile-3d-contrib/profile-gitblock.svg)
 
 ## Career😄
