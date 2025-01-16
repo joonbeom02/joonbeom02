@@ -10,11 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Generate GitHub Profile 3D Contrib
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
-          persist-credentials: false  # 토큰을 수동으로 설정하기 위해 비활성화
+          fetch-depth: 0  # 전체 히스토리 가져오기
+          persist-credentials: false  # 수동으로 토큰 설정
 
-      - uses: yoshi389111/github-profile-3d-contrib@0.7.1
+      - name: Run GitHub Profile 3D Contrib
+        uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
           GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
@@ -24,19 +27,19 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-      - name: Commit & Push
-        env:
-          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+      - name: Commit changes
         run: |
-          # 원격 저장소 URL 설정 (토큰 포함)
-          git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
-          
-          # 모든 변경 사항 스테이지 및 커밋
           git add -A
           git commit -m "Update GitHub Profile 3D Contrib" || echo "No changes to commit"
-          
-          # 최신 변경 사항을 리베이스하여 병합
+
+      - name: Set Remote with Token
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.repository.name }}.git
+
+      - name: Pull with Rebase
+        run: |
           git pull --rebase origin main
-          
-          # 변경 사항 푸시
-          git push origin main
+
+      - name: Push changes
+        run: |
+          git push origin main --force-with-lease
