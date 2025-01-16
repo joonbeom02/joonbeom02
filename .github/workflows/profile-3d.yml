@@ -22,14 +22,19 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
-
-          # 변경 사항 커밋 또는 스태시
-          git add -A .
-          git commit -m "temp commit for rebase" || echo "No changes to commit"
-
-          # Rebase 및 충돌 처리
-          git fetch origin main
-          git rebase origin/main || (git rebase --abort && echo "Rebase failed. Proceeding without rebase.")
           
-          # 강제 푸시
+          # 변경 사항 스태시 또는 커밋
+          git add -A .
+          git commit -m "Temporary commit for rebase" || git stash
+
+          # Rebase 시도
+          git fetch origin main
+          git rebase origin/main || git rebase --abort
+
+          # 스태시 적용 (스태시를 사용한 경우)
+          if git stash list | grep -q "Temporary commit for rebase"; then
+            git stash pop
+          fi
+
+          # 푸시 강제 적용
           git push origin main --force-with-lease
