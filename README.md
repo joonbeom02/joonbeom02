@@ -9,7 +9,7 @@
 <!--![Joonbeom's GitHub stats](https://github-readme-stats.vercel.app/api?username=joonbeom02&show_icons=true&theme=blueberry)-->
 ![](./profile-3d-contrib/profile-gitblock.svg)
 
-## Career😄
+## History
 
 - [2020~] Seoul Nat'l University (Major in ME, Double Major in ECE)
 - [2024.11~] 5010 Technologies, Machine Lab
