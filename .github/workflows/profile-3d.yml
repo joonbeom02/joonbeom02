@@ -8,33 +8,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: generate-github-profile-3d-contrib
+    name: Generate GitHub Profile 3D Contrib
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # 토큰을 수동으로 설정하기 위해 비활성화
+
       - uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
           GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
       - name: Commit & Push
         env:
           GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          # 원격 저장소 URL 설정 (토큰 포함)
           git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
           
-          # 변경 사항 스태시 또는 커밋
-          git add -A .
-          git commit -m "Temporary commit for rebase" || git stash
-
-          # Rebase 시도
-          git fetch origin main
-          git rebase origin/main || git rebase --abort
-
-          # 스태시 적용 (스태시를 사용한 경우)
-          if git stash list | grep -q "Temporary commit for rebase"; then
-            git stash pop
-          fi
-
-          # 푸시 강제 적용
-          git push origin main --force-with-lease
+          # 모든 변경 사항 스테이지 및 커밋
+          git add -A
+          git commit -m "Update GitHub Profile 3D Contrib" || echo "No changes to commit"
+          
+          # 최신 변경 사항을 리베이스하여 병합
+          git pull --rebase origin main
+          
+          # 변경 사항 푸시
+          git push origin main
