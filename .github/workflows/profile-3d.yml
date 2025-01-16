@@ -22,9 +22,12 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${{ secrets.MY_TOKEN }}@github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
-          git fetch origin main
-          git pull --rebase origin main  # 원격 브랜치와 로컬 브랜치 동기화
-          git add -A .
-          git commit -m "generated" || echo "No changes to commit"
-          git push origin main --force-with-lease
 
+          # Unstaged changes 처리
+          git add -A .
+          git commit -m "temp commit for rebase" || echo "No changes to commit"
+
+          # Rebase와 강제 푸시
+          git fetch origin main
+          git rebase origin/main || (git rebase --abort && echo "Rebase failed. Proceeding without rebase.")
+          git push origin main --force-with-lease
